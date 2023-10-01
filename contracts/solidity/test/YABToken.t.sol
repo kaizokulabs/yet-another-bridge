@@ -8,7 +8,7 @@ contract YABTokenTest is Test {
     YABToken public yt;
 
     function setUp() public {
-        yt = new YabToken();
+        yt = new YABToken();
     }
 
     function testMint() public {

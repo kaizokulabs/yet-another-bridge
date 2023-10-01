@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract YABToken is ERC20 {
+contract YABToken is ERC20, Ownable {
     // Dummy token
     constructor() ERC20("YABToken", "YABT") { }
     

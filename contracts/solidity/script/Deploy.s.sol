@@ -9,7 +9,7 @@ contract DeployScript is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
 
-        YABToken yt = new YABToken();
+        new YABToken();
 
         vm.stopBroadcast();
     }

@@ -78,6 +78,6 @@ func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(recip
 
 @external
 func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(account: felt, amount: Uint256) {
-    ERC20._burn(account=account, amount=amount);
+    ERC20._burn(account, amount);
     return ();
 }

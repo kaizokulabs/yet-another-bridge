@@ -6,6 +6,9 @@ from interfaces.IFactsRegistry import IFactsRegistry, StorageSlot
 from src.YABToken import constructor, mint
 
 const BRIDGE_ROLE = 0x08fb31c3e81624356c3314088aa971b73bcc82d22bc3e3b184b4593077ae327
+// This seems to be the class hash
+// the contract addr: 0x07c88f02f0757b25547af4d946445f92dbe3416116d46d7b2bd88bcfad65a06f
+// validate which to use
 const FACTS_REGISTRY_ADDRESS = 0x0183d02c1eab527004f479bef2709ad213ed5f54204754bbd0013324c5754d5c;
 
 let eth_bridge_address: felt;

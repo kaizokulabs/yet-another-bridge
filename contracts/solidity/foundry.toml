@@ -7,4 +7,8 @@ remappings = [
   "forge-std/=lib/forge-std/src",
 ]
 
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config
+[rpc_endpoints]
+goerli = 'https://rpc.ankr.com/eth_goerli'
+
+[etherscan]
+goerli = { key = "${ETHERSCAN_API_KEY}" }

@@ -1,6 +1,18 @@
 %lang starknet
 
 from openzeppelin.token.erc20.library import ERC20
+from openzeppelin.access.accesscontrol.library import AccessControl
+from openzeppelin.access.ownable.library import Ownable
+
+@constructor
+func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
+    ERC20.initializer("YABToken", "YABT", 10);
+
+    let (caller_address: felt) = get_caller_address();
+    Ownable.initializer(caller_address);
+
+    return ();
+}
 
 // Getters ERC20
 
@@ -39,15 +51,12 @@ func allowance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(
 
 @external
 func transfer{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(recipient: felt, amount: Uint256) -> (success: felt) {
-    let (from_) = get_caller_address();
-    incentivized_erc20_before_token_transfer(from_, recipient);
     ERC20.transfer(recipient, amount);
     return (TRUE,);
 }
 
 @external
 func transferFrom{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(sender: felt, recipient: felt, amount: Uint256) -> (success: felt) {
-    incentivized_erc20_before_token_transfer(sender, recipient);
     ERC20.transfer_from(sender, recipient, amount);
     return (TRUE,);
 }
@@ -72,12 +81,14 @@ func decreaseAllowance{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_che
 
 @external
 func mint{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(recipient: felt, amount: Uint256) {
+    Ownable.assert_only_owner();
     ERC20._mint(recipient, amount);
     return ();
 }
 
 @external
 func burn{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}(account: felt, amount: Uint256) {
+    Ownable.assert_only_owner();
     ERC20._burn(account, amount);
     return ();
 }

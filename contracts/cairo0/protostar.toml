@@ -1,7 +1,12 @@
 [project]
 protostar-version = "0.14.0"
 lib-path = "lib"
+cairo-path = [
+    "src",
+    "./lib/cairo_contracts/src",
+]
 
 [contracts]
-main = ["src/main.cairo"]
+bridge = ["src/Bridge.cairo"]
+token = ["src/YABToken.cairo"]
 

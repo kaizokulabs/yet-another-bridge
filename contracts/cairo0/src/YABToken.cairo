@@ -6,7 +6,7 @@ from openzeppelin.access.ownable.library import Ownable
 
 @constructor
 func constructor{syscall_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr}() {
-    ERC20.initializer("YABToken", "YABT", 10);
+    ERC20.initializer("YABEthereum", "yabETH", 18);
 
     let (caller_address: felt) = get_caller_address();
     Ownable.initializer(caller_address);

@@ -1,0 +1,6 @@
+[package]
+name = "yab_cairo"
+version = "0.1.0"
+
+[dependencies]
+openzeppelin = { git = "https://github.com/OpenZeppelin/cairo-contracts.git", tag = "v0.7.0" }

@@ -6,7 +6,8 @@ YAB is simple PoC lock and mint bridge from Ethereum to Starknet using Herodotus
 
 ## Architecture
 
-![image](https://github.com/kaizokulabs/yet-another-bridge/assets/13773225/27251f7c-0b2c-4404-b178-11ce36428a77)
+![image](https://github.com/kaizokulabs/yet-another-bridge/assets/13773225/d7c72ccc-26d2-4acd-8d08-2fd213ad9f08)
+
 
 ## Things to note
 

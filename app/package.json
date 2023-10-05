@@ -1,0 +1,35 @@
+{
+  "name": "yab",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.11",
+    "@starknet-react/chains": "next",
+    "@starknet-react/core": "next",
+    "@types/node": "20.8.2",
+    "@types/react": "18.2.24",
+    "@types/react-dom": "18.2.8",
+    "@wagmi/core": "^1.4.3",
+    "autoprefixer": "10.4.16",
+    "eslint": "8.50.0",
+    "eslint-config-next": "13.5.4",
+    "get-starknet-core": "^3.2.0",
+    "next": "13.5.4",
+    "postcss": "8.4.31",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "starknet": "^5.19.5",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.2.2",
+    "viem": "^1.15.2",
+    "wagmi": "^1.4.3"
+  }
+}

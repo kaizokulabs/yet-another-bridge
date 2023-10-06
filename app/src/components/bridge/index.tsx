@@ -1,17 +1,38 @@
+import { abi as BridgeABI} from "@/abi/Bridge.json"
+import { ethereum_bridge_addr } from "@/utils/constants";
+import { ethereumBridgeBalance } from "@/utils/ethereum_bridge";
 import { Button, OutlinedInput, Select } from "@mui/material";
-import { useState } from "react";
-import { useAccount, useBalance } from "wagmi";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import { useAccount, useBalance, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
 
 export default function Bridge() {
   let balance = Number(useBalance({
     address: useAccount().address
   }).data?.formatted)
   let eth_balance = isNaN(balance) ? 0 : balance.toFixed(5)
+  let [bridgeBalance, setBridgeBalance] = useState(0)
   let [amount, setAmount] = useState(0)
+
+  const read = ethereumBridgeBalance()
+
+  useEffect(() => {
+    if (read?.data) {
+      setBridgeBalance(Number(read.data))
+    }
+  }, [read])
+
+  const { config } = usePrepareContractWrite({
+    address: ethereum_bridge_addr,
+    abi: BridgeABI,
+    functionName: 'deposit',
+    value: ethers.parseEther(amount.toString())
+  })
+  const { write } = useContractWrite(config)
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    console.log(amount)
+    write?.()
   }
 
   return (
@@ -66,6 +87,8 @@ export default function Bridge() {
           </div>
 
           (Balance: <span onClick={() => setAmount(Number(eth_balance))} className="cursor-pointer text-[#48A6B2]">{eth_balance} ETH</span>)
+          <br/>
+          (Bridge balance: {ethers.formatEther(bridgeBalance)} ETH)
         </div>
 
         <div className="mt-8">

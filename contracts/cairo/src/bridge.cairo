@@ -3,6 +3,7 @@ use yab::interfaces::herodotus::{StorageProof, StorageSlot};
 #[starknet::interface]
 trait IBridgeTarget<TContractState> {
     fn get_used_deposit(self: @TContractState, deposit_id: u256) -> bool;
+
     fn withdraw(
         ref self: TContractState, 
         deposit_id: u256,
@@ -73,11 +74,16 @@ mod BridgeTarget {
                 //uint128 amount;
             //}
 
+            let mut slot_1 = slot.clone();
+            slot_1.word_4 += 1;
+
+            let slot_0 = slot;
+
             // Slot n contains the address of the recipient
             let slot_0_value = IFactsRegistryDispatcher { contract_address: HERODOTUS_FACTS_REGISTRY.try_into().unwrap() }.get_storage_uint(
                 block,
                 ETH_DEPOSIT_CONTRACT,
-                slot.clone(),
+                slot_0,
                 proof_0.proof_sizes_bytes_len,
                 proof_0.proof_sizes_bytes,
                 proof_0.proof_sizes_words_len,
@@ -92,7 +98,7 @@ mod BridgeTarget {
             let slot_1_value = IFactsRegistryDispatcher { contract_address: HERODOTUS_FACTS_REGISTRY.try_into().unwrap() }.get_storage_uint(
                 block,
                 ETH_DEPOSIT_CONTRACT,
-                slot,
+                slot_1,
                 proof_1.proof_sizes_bytes_len,
                 proof_1.proof_sizes_bytes,
                 proof_1.proof_sizes_words_len,

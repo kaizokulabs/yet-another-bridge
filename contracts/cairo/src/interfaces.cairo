@@ -1,2 +1,1 @@
-
 mod facts_registry;

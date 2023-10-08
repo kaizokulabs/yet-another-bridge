@@ -1,4 +1,14 @@
 #[derive(Serde, Drop)]
+struct StorageProof {
+    proof_sizes_bytes_len: felt252,
+    proof_sizes_bytes: Array<felt252>,
+    proof_sizes_words_len: felt252,
+    proof_sizes_words: Array<felt252>,
+    proofs_concat_len: felt252,
+    proofs_concat: Array<felt252>
+}
+
+#[derive(Serde, Drop, Clone)]
 struct StorageSlot {
     word_1: felt252,
     word_2: felt252,

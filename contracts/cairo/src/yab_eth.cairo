@@ -1,17 +1,17 @@
 use starknet::ContractAddress;
 
 #[starknet::interface]
-trait IYABERC20<T> {
-    fn mint(self: @T, account: ContractAddress, amount: u256);
+trait IYABETH<TContractState> {
+    fn mint(ref self: TContractState, account: ContractAddress, amount: u256);
 }
 
 #[starknet::contract]
-mod YABERC20 {
+mod YABETH {
     use starknet::{get_caller_address, ContractAddress};
     use openzeppelin::access::ownable::Ownable;
     use openzeppelin::token::erc20::ERC20;
     use openzeppelin::token::erc20::interface::IERC20;
-    use super::IYABERC20;
+    use super::IYABETH;
 
     #[storage]
     struct Storage {}
@@ -31,9 +31,9 @@ mod YABERC20 {
 
 
     #[external(v0)]
-    impl YABTokenImpl of IYABERC20<ContractState> {
+    impl YABTokenImpl of IYABETH<ContractState> {
         fn mint(
-            self: @ContractState,
+            ref self: ContractState,
             account: ContractAddress,
             amount: u256
         ) {

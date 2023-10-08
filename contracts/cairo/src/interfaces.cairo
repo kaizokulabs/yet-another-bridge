@@ -1,1 +1,1 @@
-mod facts_registry;
+mod herodotus;

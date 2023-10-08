@@ -6,31 +6,3 @@ export const herodotus_api_endpoint = "https://api.herodotus.cloud/"
 //export const herodotus_api_key = process.env.HERODOTUS_API_KEY as string
 // no problem being public (it was already in another public repo)
 export const herodotus_api_key = "c0a1de24-9f68-42f7-a424-ba20008373cb"
-
-export const available_networks = [
-  {
-    name: "Ethereum",
-    id: "ethereum",
-    logo: "/images/ethereum-logo.png",
-    chainId: 1,
-  },
-  {
-    name: "Starknet",
-    id: "starknet",
-    logo: "/images/starknet-logo.png",
-    chainId: 2,
-  },
-]
- 
-export const available_tokens = [
-  {
-    name: "ETH",
-    id: "eth",
-    logo: "/images/ethereum-logo.png",
-  },
-  {
-    name: "yabETH",
-    id: "yabeth",
-    logo: "/images/starknet-logo.png",
-  },
-]

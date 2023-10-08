@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 
 export default function Deposits() {
-  const [deposits, setDeposits] = useState({});
+  const [deposits, setDeposits] = useState({})
   const [cookies, _setCookie, _deleteCookie] = useCookies(['deposits'])
 
   useEffect(() => {

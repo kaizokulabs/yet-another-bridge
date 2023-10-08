@@ -6,7 +6,6 @@ export default function DepositsList(props: any) {
   const router = useRouter()
 
   useEffect(() => {
-    console.log(props)
     setDeposits(props.deposits)
   }, [props])
 

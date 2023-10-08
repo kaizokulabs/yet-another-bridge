@@ -1,42 +1,38 @@
 import { ethereumBridgeBalance, ethereumBridgeDeposit } from "@/utils/ethereum_bridge";
 import { Button, OutlinedInput, Select } from "@mui/material";
-import { fetchBalance, getAccount } from "@wagmi/core";
 import { ethers } from "ethers";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import { useAccount, useBalance } from "wagmi";
 
 export default function Bridge() {
-  const account = getAccount()
-  const [ethBalance, setEthBalance] = useState("0")
+  const router = useRouter()
+  const account = useAccount()
+  const ethBalance = useBalance({
+    address: account.address,
+  })
+
   const [bridgeBalance, setBridgeBalance] = useState("0")
   const [amount, setAmount] = useState(0)
   const [cookies, setCookie, _] = useCookies(['deposits'])
 
   let bridge_balance = ethereumBridgeBalance()
 
-  console.log(account.status)
   useEffect(() => {
-    if(!account.address) {
-      return
-    }
-    fetchBalance({
-      address: account.address
-    }).then((balance) => {
-      setEthBalance(Number(balance.formatted).toFixed(5))
-    })
     bridge_balance.then((balance: any) => {
       setBridgeBalance(Number(ethers.formatEther(balance)).toFixed(5))
     })
   }, [account.status, bridge_balance])
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault()
     let deposits = cookies.deposits
     if (deposits === undefined) {
       deposits = {}
     }
 
-    //ethereumBridgeDeposit(amount)
+    const hash = await ethereumBridgeDeposit(amount)
 
     // get the id from the emited event
     let random_id = (Math.random() * 1000).toFixed(0)
@@ -45,8 +41,15 @@ export default function Bridge() {
       id: random_id,
       status: "pending",
       amount: amount,
+      ethereum_tx: {
+        hash: hash,
+        status: "loading",
+      },
+      starknet_tx: undefined,
+      herodotus_tasks: undefined,
     }
     setCookie('deposits', deposits)
+    router.push('/deposits/' + random_id)
   }
 
   return (
@@ -100,7 +103,9 @@ export default function Bridge() {
             />
           </div>
 
-          (Balance: <span onClick={() => setAmount(Number(ethBalance))} className="cursor-pointer text-[#48A6B2]">{ethBalance} ETH</span>)
+          (Balance: <span onClick={() => setAmount(Number(ethBalance))} className="cursor-pointer text-[#48A6B2]">{
+            (Number(ethBalance.data?.formatted) || 0).toFixed(5)
+          } ETH</span>)
           <br/>
           (Bridge balance: {bridgeBalance} ETH)
         </div>

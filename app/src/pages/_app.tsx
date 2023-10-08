@@ -2,12 +2,18 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { EthereumProvider } from '@/components/wallet/ethereum/ethereum-provider'
 import { StarknetProvider } from "@/components/wallet/starknet/starknet-provider"
+import Footer from '@/components/footer'
+import Header from '@/components/header'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <EthereumProvider>
       <StarknetProvider>
-        <Component {...pageProps} />
+        <div className="min-h-screen p-2">
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+        </div>
       </StarknetProvider>
     </EthereumProvider>
   )

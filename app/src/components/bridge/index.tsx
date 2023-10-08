@@ -1,38 +1,52 @@
-import { abi as BridgeABI} from "@/abi/Bridge.json"
-import { ethereum_bridge_addr } from "@/utils/constants";
-import { ethereumBridgeBalance } from "@/utils/ethereum_bridge";
+import { ethereumBridgeBalance, ethereumBridgeDeposit } from "@/utils/ethereum_bridge";
 import { Button, OutlinedInput, Select } from "@mui/material";
+import { fetchBalance, getAccount } from "@wagmi/core";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { useAccount, useBalance, useContractRead, useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useCookies } from "react-cookie";
 
 export default function Bridge() {
-  let balance = Number(useBalance({
-    address: useAccount().address
-  }).data?.formatted)
-  let eth_balance = isNaN(balance) ? 0 : balance.toFixed(5)
-  let [bridgeBalance, setBridgeBalance] = useState(0)
-  let [amount, setAmount] = useState(0)
+  const account = getAccount()
+  const [ethBalance, setEthBalance] = useState("0")
+  const [bridgeBalance, setBridgeBalance] = useState("0")
+  const [amount, setAmount] = useState(0)
+  const [cookies, setCookie, _] = useCookies(['deposits'])
 
-  const read = ethereumBridgeBalance()
+  let bridge_balance = ethereumBridgeBalance()
 
+  console.log(account.status)
   useEffect(() => {
-    if (read?.data) {
-      setBridgeBalance(Number(read.data))
+    if(!account.address) {
+      return
     }
-  }, [read])
-
-  const { config } = usePrepareContractWrite({
-    address: ethereum_bridge_addr,
-    abi: BridgeABI,
-    functionName: 'deposit',
-    value: ethers.parseEther(amount.toString())
-  })
-  const { write } = useContractWrite(config)
+    fetchBalance({
+      address: account.address
+    }).then((balance) => {
+      setEthBalance(Number(balance.formatted).toFixed(5))
+    })
+    bridge_balance.then((balance: any) => {
+      setBridgeBalance(Number(ethers.formatEther(balance)).toFixed(5))
+    })
+  }, [account.status, bridge_balance])
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    write?.()
+    let deposits = cookies.deposits
+    if (deposits === undefined) {
+      deposits = {}
+    }
+
+    //ethereumBridgeDeposit(amount)
+
+    // get the id from the emited event
+    let random_id = (Math.random() * 1000).toFixed(0)
+
+    deposits[random_id] = {
+      id: random_id,
+      status: "pending",
+      amount: amount,
+    }
+    setCookie('deposits', deposits)
   }
 
   return (
@@ -86,9 +100,9 @@ export default function Bridge() {
             />
           </div>
 
-          (Balance: <span onClick={() => setAmount(Number(eth_balance))} className="cursor-pointer text-[#48A6B2]">{eth_balance} ETH</span>)
+          (Balance: <span onClick={() => setAmount(Number(ethBalance))} className="cursor-pointer text-[#48A6B2]">{ethBalance} ETH</span>)
           <br/>
-          (Bridge balance: {ethers.formatEther(bridgeBalance)} ETH)
+          (Bridge balance: {bridgeBalance} ETH)
         </div>
 
         <div className="mt-8">

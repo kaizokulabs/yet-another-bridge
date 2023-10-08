@@ -15,7 +15,7 @@ export default function Bridge() {
 
   const [bridgeBalance, setBridgeBalance] = useState("0")
   const [amount, setAmount] = useState(0)
-  const [cookies, setCookie, _] = useCookies(['deposits'])
+  const [cookies, setCookie] = useCookies(['deposits'])
 
   let bridge_balance = ethereumBridgeBalance()
 
@@ -43,7 +43,7 @@ export default function Bridge() {
       amount: amount,
       ethereum_tx: {
         hash: hash,
-        status: "loading",
+        status: "pending",
       },
       starknet_tx: undefined,
       herodotus_task: undefined,

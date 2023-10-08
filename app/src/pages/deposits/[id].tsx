@@ -1,9 +1,11 @@
 import DepositStatus from "@/components/deposits/status";
-import { herodotus_task_schedule } from "@/utils/herodotus_api";
+import { herodotus_axios, herodotus_task_schedule } from "@/utils/herodotus_api";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useWaitForTransaction } from "wagmi";
+import { fetchBlockNumber } from "@wagmi/core";
+import { ethereum_bridge_addr } from "@/utils/constants";
 
 export default function Deposit() {
   const router = useRouter()
@@ -29,10 +31,11 @@ export default function Deposit() {
       return
     }
     deposit = deposit[0][1]
-    setDeposit(deposit)
 
     setEthTxHash(deposit.ethereum_tx?.hash)
-    deposit.ethereum_tx.status = data?.status
+    deposit.ethereum_tx.status = data?.status || "pending"
+
+    setDeposit(deposit)
 
     if(deposit.status === "complete") {
       return
@@ -48,15 +51,16 @@ export default function Deposit() {
     } else if (deposit.ethereum_tx?.status === "success"
       && deposit.herodotus_task === undefined) {
       console.log("scheduling herodotus task")
-      /*
-      herodotus_task_schedule("GOERLI", "STARKNET_GOERLI", deposit.id, deposit.amount)
-        .then((task: any) => {
-          deposit.herodotus_task = {
-            id: task.taskId,
-            status: task.taskStatus,
-          }
+      fetchBlockNumber()
+        .then((block_number: any) => {
+        herodotus_task_schedule("GOERLI", "STARKNET_GOERLI", Number(block_number), ethereum_bridge_addr)
+          .then((task: any) => {
+            deposit.herodotus_task = {
+              id: task.taskId,
+              status: task.taskStatus,
+            }
+          })
         })
-      */
     }
 
     if(depositsCookie[deposit.id] !== deposit) {

@@ -1,5 +1,12 @@
 # YAB - Yet Another Bridge
 
+> <picture>
+>   <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/light-theme/danger.svg">
+>   <img alt="Danger" src="https://raw.githubusercontent.com/Mqxx/GitHub-Markdown/main/blockquotes/badge/dark-theme/danger.svg">
+> </picture><br>
+>
+> This bridge is highly experimental, interacting with it will lead to loss of funds!
+
 ## Description
 
 YAB is simple PoC lock and mint bridge from Ethereum to Starknet using Herodotus. The main objective is develop a functional prototype that allows to deposit a native ETH on an Ethereum Smart Contract and mint its equivalent in Starknet. The mint function will be allowed if and only if there is a valid Storage Proof created by Herodotus and registered in the FactRegistry.

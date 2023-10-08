@@ -1,5 +1,5 @@
 import DepositStatus from "@/components/deposits/status";
-import { herodotus_axios, herodotus_task_schedule } from "@/utils/herodotus_api";
+import { herodotus_task_schedule } from "@/utils/herodotus_api";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";

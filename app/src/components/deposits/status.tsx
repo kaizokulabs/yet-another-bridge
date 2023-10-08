@@ -32,14 +32,12 @@ export default function DepositStatus(props: any) {
               </span>
             </div>
           }
-          { deposit.herodotus_tasks?.map((task: any) => {
-            return (
-              <div className="gap-4 mt-4">
-                <span className="text-white">Herodotus Task: </span>
-                <span className="text-white">{task.id} ({task.status})</span>
-              </div>
-            )
-          })}
+          { deposit.herodotus_task === undefined ? null :
+            <div className="gap-4 mt-4">
+              <span className="text-white">Herodotus Task: </span>
+              <span className="text-white">{deposit.herodotus_task.id} ({deposit.herodotus_task.status})</span>
+            </div>
+          }
           { deposit.starknet_tx === undefined ? null :
             <div className="gap-4 mt-4">
               <span className="text-white">Starknet Transaction: </span>

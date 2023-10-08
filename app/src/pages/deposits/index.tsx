@@ -15,7 +15,7 @@ export default function Deposits() {
   }, [cookies])
 
   return (
-    <div className="flex flex-col items-center justify-center w-full mt-24">
+    <div className="flex flex-col items-center justify-center w-full mt-16">
       <span className="text-2xl font-bold text-white">Deposits</span>
       <DepositsList
         deposits={deposits}

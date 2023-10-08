@@ -46,7 +46,7 @@ export default function Bridge() {
         status: "loading",
       },
       starknet_tx: undefined,
-      herodotus_tasks: undefined,
+      herodotus_task: undefined,
     }
     setCookie('deposits', deposits)
     router.push('/deposits/' + random_id)

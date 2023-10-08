@@ -21,7 +21,7 @@ mod BridgeTarget {
     use yab::interfaces::herodotus::{StorageProof, StorageSlot, IFactsRegistryDispatcher, IFactsRegistryDispatcherTrait};
 
     const HERODOTUS_FACTS_REGISTRY: felt252 = 0x07c88f02f0757b25547af4d946445f92dbe3416116d46d7b2bd88bcfad65a06f;
-    const ETH_DEPOSIT_CONTRACT: felt252 = 0x0;
+    const ETH_DEPOSIT_CONTRACT: felt252 = 0x15bB1ed8E976e3d30Df8877ce15aCe1FDD3C2da7;
     const CHAIN_ID: u128 = 0x534e5f474f45524c49;
 
     #[event]

@@ -4,14 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export && touch ./out/.nojekyll && echo 'yab.kaizokulabs.com' > ./out/CNAME",
+    "build": "next build && next export",
     "start": "next start",
-    "lint": "next lint",
-    "deploy": "gh-pages -d out -t true"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@kaizokulabs/ui": "^0.1.0",
     "@mui/material": "^5.14.11",
     "@starknet-react/chains": "next",
     "@starknet-react/core": "next",
@@ -24,7 +24,6 @@
     "eslint-config-next": "13.5.4",
     "ethers": "^6.7.1",
     "get-starknet-core": "^3.2.0",
-    "gh-pages": "^6.0.0",
     "next": "13.5.4",
     "postcss": "8.4.31",
     "react": "18.2.0",

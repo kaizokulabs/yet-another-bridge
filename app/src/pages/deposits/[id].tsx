@@ -67,7 +67,7 @@ export default function Deposit() {
       depositsCookie[deposit.id] = deposit
       setCookie('deposits', depositsCookie)
     }
-  }, [cookies, data])
+  }, [cookies, data, setCookie, router])
 
   return (
     <div className="flex flex-col items-center justify-center w-full mt-16">

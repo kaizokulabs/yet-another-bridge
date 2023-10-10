@@ -1,4 +1,3 @@
-import Image from "next/image"
 
 export default function Footer() {
   return (
@@ -13,14 +12,14 @@ export default function Footer() {
           </div>
         </a>
         <a href="https://herodotus.dev" target="_blank">
-          <Image
+          <img
             className="ml-10 h-10"
             src="/images/herodotus-logo.svg"
             alt="logo"
           />
         </a>
         <a href="https://github.com/kaizokulabs" target="_blank">
-          <Image
+          <img
             className="ml-10 h-24"
             src="/images/kaizoku-logo.png"
             alt="logo"

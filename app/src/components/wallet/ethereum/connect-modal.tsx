@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { Connector, useConnect } from "wagmi";
-import Image from "next/image";
 
 export default function ConnectModal() {
   const { connect, connectors } = useConnect();
@@ -14,7 +13,7 @@ export default function ConnectModal() {
         variant="outlined"
         className="py-2 px-4 border-1 border-[#48A6B2] hover:border-[#FB9489] text-white"
         onClick={() => setModalOpen(true)}>
-        <Image
+        <img
           src="/images/ethereum-logo.png"
           alt="Starknet Logo"
           className="h-8 mr-2"

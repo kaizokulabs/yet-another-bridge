@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import { useConnect, Connector } from "@starknet-react/core";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import Image from "next/image";
 
 export default function ConnectModal() {
   const { connect, connectors } = useConnect();
@@ -14,7 +13,7 @@ export default function ConnectModal() {
         variant="outlined"
         className="py-2 px-4 border-1 border-[#FB9489] hover:border-[#AB679F] text-white"
         onClick={() => setModalOpen(true)}>
-        <Image
+        <img
           src="/images/starknet-logo.png"
           alt="Starknet Logo"
           className="h-8 mr-2"

@@ -1,0 +1,45 @@
+---
+name: Release Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  pages: write
+  id-token: write
+
+jobs:
+  gh-pages-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Prepare repository
+        run: git fetch --unshallow --tags
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+      - name: Install dependencies
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: No jekyll
+        run: touch out/.nojekyll
+      - name: Add CNAME for gh-pages
+        run: |
+          echo 'https://yab.kaizokulabs.com' > out/CNAME
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./out
+
+  gh-pages-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: gh-pages-build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

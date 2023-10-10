@@ -1,4 +1,3 @@
-import axios from "axios";
 import { herodotus_api_endpoint, herodotus_api_key } from "./constants";
 
 export const herodotus_task_schedule = async (origin: string, destination: string, blockNum: number, address: string) => {

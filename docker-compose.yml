@@ -7,3 +7,21 @@ services:
       - ./app:/app
     ports:
       - "3000:3000"
+    depends_on:
+      contracts:
+        condition: service_completed_successfully
+
+  contracts:
+    build: contracts
+    volumes:
+      - ./app/.env:/contracts/app/.env
+    environment:
+      - NETWORK=goerli
+      - GOERLI_RPC_URL=
+      - ETHERSCAN_API_KEY=
+      # it can be ignored if ETH_BRIDGE_ADDRESS is filled
+      - PRIVATE_KEY=0x0
+      - ETH_BRIDGE_ADDRESS=0x0
+      # it can be ignored if STARK_BRIDGE_ADDRESS is filled
+      - STARK_PRIV_KEY=0x0
+      - STARK_BRIDGE_ADDRESS=0x0

@@ -1,8 +1,20 @@
 use yab::interfaces::herodotus::{StorageProof, StorageSlot};
 
 #[starknet::interface]
-trait IBridgeTarget<TContractState> {
-    fn get_used_deposit(self: @TContractState, deposit_id: u256) -> bool;
+trait IEscrow<TContractState> {
+    fn get_deposits_list(self: @ContractState) -> Array<u256>;
+
+    fn get_deposit(self: @ContractState, deposit_id: u256) -> Deposit;
+
+    fn set_deposit(self: @ContractState, deposit_id: u256, deposit: Deposit);
+
+    fn cancel_deposit(self: @ContractState, deposit_id: u256);
+
+    fn get_deposit_status(self: @ContractState, deposit_id: u256) -> bool;
+
+    fn get_reservation(self: @ContractState, deposit_id: u256) -> ContractAddress;
+
+    fn set_reservation(self: @ContractState, deposit_id: u256, address: ContractAddress);
 
     fn withdraw(
         ref self: TContractState,
@@ -15,47 +27,80 @@ trait IBridgeTarget<TContractState> {
 }
 
 #[starknet::contract]
-mod BridgeTarget {
-    use starknet::ContractAddress;
-    use yab::yab_eth::{IYABETHDispatcher, IYABETHDispatcherTrait};
+mod Escrow {
+    use starknet::{ContractAddress, EthAddress};
     use yab::interfaces::herodotus::{
         StorageProof, StorageSlot, IFactsRegistryDispatcher, IFactsRegistryDispatcherTrait
     };
 
+    const NATIVE_TOKEN: felt252 = 0x0;
     const HERODOTUS_FACTS_REGISTRY: felt252 =
         0x07c88f02f0757b25547af4d946445f92dbe3416116d46d7b2bd88bcfad65a06f;
-    const ETH_DEPOSIT_CONTRACT: felt252 = 0x15bB1ed8E976e3d30Df8877ce15aCe1FDD3C2da7;
-    const CHAIN_ID: u128 = 0x534e5f474f45524c49;
 
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
-        Withdraw: Withdraw,
+        Deposit: Deposit,
     }
 
     #[derive(Drop, starknet::Event)]
-    struct Withdraw {
+    struct Deposit {
         #[key]
         deposit_id: u256,
-        address: ContractAddress,
-        amount: u128
+        amount: u256,
+        recipient_address: EthAddress,
+        fee: u64,
+        expiry: u64
     }
 
     #[storage]
     struct Storage {
-        yab_eth: ContractAddress,
-        used_deposits: LegacyMap::<u256, bool>
+        nonce: u256,
+        deposits: LegacyMap::<u256, Deposit>,
+        deposits_list: Array<u256>,
+        deposits_status: LegacyMap::<u256, bool>,
+        reservations: LegacyMap::<u256, ContractAddress>
     }
 
     #[constructor]
     fn constructor(ref self: ContractState, yab_eth: ContractAddress) {
-        self.yab_eth.write(yab_eth);
+        nonce = 0;
     }
 
     #[external(v0)]
-    impl BridgeTarget of super::IBridgeTarget<ContractState> {
-        fn get_used_deposit(self: @ContractState, deposit_id: u256) -> bool {
-            self.used_deposits.read(deposit_id)
+    impl Escrow of super::IEscrow<ContractState> {
+        fn get_deposits_list(self: @ContractState) -> Array<u256> {
+            self.deposits_list
+        }
+
+        fn get_deposit(self: @ContractState, deposit_id: u256) -> Deposit {
+            self.deposits.read(deposit_id)
+        }
+
+        fn set_deposit(self: @ContractState, deposit_id: u256, deposit: Deposit) {
+            // TODO expiry can't be less than 24h
+            self.deposits.write(deposit_id, deposit);
+        }
+
+        fn cancel_deposit(self: @ContractState, deposit_id: u256) {
+            // TODO the deposit can be cancelled if no one reserved yet
+            // the user can retrieve all the funds without waiting for the expiry
+            self.deposits.remove(deposit_id);
+        }
+
+        fn get_deposit_status(self: @ContractState, deposit_id: u256) -> bool {
+            self.deposits_status.read(deposit_id)
+        }
+
+        fn get_reservation(self: @ContractState, deposit_id: u256) -> ContractAddress {
+            self.reservations.read(deposit_id)
+        }
+
+        fn set_reservation(self: @ContractState, deposit_id: u256, address: ContractAddress) {
+            assert(!self.reservations.read(deposit_id), 'Deposit already reserved');
+            // TODO validate if it's already reserved
+            // stake amount to avoid DoS
+            self.reservations.write(deposit_id, reservation);
         }
 
         fn withdraw(
@@ -67,7 +112,11 @@ mod BridgeTarget {
             proof_1: StorageProof
         ) {
             // 1. Verify deposit has not been used
-            assert(!self.used_deposits.read(deposit_id), 'Deposit already used');
+            assert(!self.deposit_status.read(deposit_id), 'Deposit already used');
+            assert(
+                self.reservations.read(deposit_id) == msg.sender,
+                'Message sender is not the person who reserved'
+            );
 
             // 2. Read deposit info from the facts registry
 

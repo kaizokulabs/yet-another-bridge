@@ -32,11 +32,7 @@ mod YABETH {
 
     #[external(v0)]
     impl YABTokenImpl of IYABETH<ContractState> {
-        fn mint(
-            ref self: ContractState,
-            account: ContractAddress,
-            amount: u256
-        ) {
+        fn mint(ref self: ContractState, account: ContractAddress, amount: u256) {
             // This function can only be called by the bridge
             let unsafe_state = Ownable::unsafe_new_contract_state();
             Ownable::InternalImpl::assert_only_owner(@unsafe_state);

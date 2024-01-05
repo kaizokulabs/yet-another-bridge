@@ -1,3 +1,5 @@
+> This repo was archived in favor of https://github.com/yetanotherco/yet-another-bridge
+
 # YAB - Yet Another Bridge
 
 > <picture>
